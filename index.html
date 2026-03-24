@@ -3,48 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matek Kaland: Törtek Birodalma</title>
+    <title>Interaktív Törtek - 5. Osztály</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: #f0f8ff; color: #333; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        .szabaly { background-color: #e7f3fe; border-left: 6px solid #2196F3; margin-bottom: 15px; padding: 10px; border-radius: 5px; }
-        .feladat-doboz { background: #fffbe6; border: 1px solid #ffe58f; padding: 15px; border-radius: 8px; margin-top: 20px; }
-        .tort { display: inline-block; vertical-align: middle; text-align: center; font-weight: bold; }
-        .szamlalo { border-bottom: 2px solid #333; display: block; padding: 0 5px; }
-        .nevezo { display: block; padding: 0 5px; }
-        .muvelet { font-size: 1.2em; font-weight: bold; margin: 0 10px; }
+        body { font-family: 'Comic Sans MS', cursive, sans-serif; background-color: #fdf6e3; padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; max-width: 500px; width: 100%; padding: 25px; border-radius: 20px; shadow: 0 10px 30px rgba(0,0,0,0.1); border: 3px solid #3498db; }
+        h1 { color: #e67e22; text-align: center; }
+        .question { font-size: 1.2rem; margin-bottom: 20px; background: #f0f7ff; padding: 15px; border-radius: 10px; }
+        .fraction-input { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; }
+        input { width: 40px; padding: 5px; text-align: center; font-size: 1.1rem; border: 2px solid #bdc3c7; border-radius: 5px; }
+        .line { border-top: 2px solid black; width: 40px; margin: 5px 0; }
+        button { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; }
+        button:hover { background: #2ecc71; }
+        #feedback { margin-top: 15px; text-align: center; font-weight: bold; min-height: 24px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🍕 Törtek Világa - 5. Osztály</h1>
-        
-        <div class="szabaly">
-            <h3>📖 Emlékeztető:</h3>
-            <p><strong>Összeadás/Kivonás:</strong> Csak azonos nevezőjű törteket tudunk összeadni. Ha különbözőek, hozzuk őket közös nevezőre!</p>
-            <p><strong>Szorzás:</strong> A számlálót szorozzuk a természetes számmal.</p>
-            <p><strong>Osztás:</strong> A nevezőt szorozzuk (vagy a számlálót osztjuk).</p>
-        </div>
 
-        <div class="feladat-doboz">
-            <h2>✍️ Gyakorló feladatok</h2>
-            <p>1. Számítsd ki az eredményt!</p>
-            <div>
-                <span class="tort"><span class="szamlalo">3</span><span class="nevezo">8</span></span>
-                <span class="muvelet">+</span>
-                <span class="tort"><span class="szamlalo">2</span><span class="nevezo">8</span></span>
-                <span class="muvelet">= ?</span>
-            </div>
-            <br>
-            <p>2. Különböző nevezők:</p>
-            <div>
-                <span class="tort"><span class="szamlalo">1</span><span class="nevezo">2</span></span>
-                <span class="muvelet">+</span>
-                <span class="tort"><span class="szamlalo">1</span><span class="nevezo">4</span></span>
-                <span class="muvelet">= ?</span>
-            </div>
+<div class="card">
+    <h1>🍕 Tört-Kvíz</h1>
+    <p>Számítsd ki a műveletet és írd be a számlálót és a nevezőt!</p>
+
+    <div class="question">
+        Mennyi: <strong>1/2 + 1/4</strong> ?
+    </div>
+
+    <div class="fraction-input">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <input type="number" id="num" placeholder="?">
+            <div class="line"></div>
+            <input type="number" id="den" placeholder="?">
         </div>
     </div>
+
+    <button onclick="checkAnswer()">Ellenőrzés!</button>
+    <div id="feedback"></div>
+</div>
+
+<script>
+    function checkAnswer() {
+        const num = document.getElementById('num').value;
+        const den = document.getElementById('den').value;
+        const feedback = document.getElementById('feedback');
+
+        if(num == 3 && den == 4) {
+            feedback.innerHTML = "🎉 Szuper! 3/4 a helyes válasz!";
+            feedback.style.color = "#27ae60";
+        } else if (num == "" || den == "") {
+            feedback.innerHTML = "⚠️ Írj be számokat!";
+            feedback.style.color = "#e67e22";
+        } else {
+            feedback.innerHTML = "❌ Nem pont ennyi... Próbáld újra!";
+            feedback.style.color = "#c0392b";
+        }
+    }
+</script>
+
 </body>
 </html>
