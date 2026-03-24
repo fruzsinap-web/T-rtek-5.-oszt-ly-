@@ -3,59 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interaktív Törtek - 5. Osztály</title>
+    <title>Törtek Birodalma - Interaktív Gyakorló</title>
     <style>
-        body { font-family: 'Comic Sans MS', cursive, sans-serif; background-color: #fdf6e3; padding: 20px; display: flex; justify-content: center; }
-        .card { background: white; max-width: 500px; width: 100%; padding: 25px; border-radius: 20px; shadow: 0 10px 30px rgba(0,0,0,0.1); border: 3px solid #3498db; }
-        h1 { color: #e67e22; text-align: center; }
-        .question { font-size: 1.2rem; margin-bottom: 20px; background: #f0f7ff; padding: 15px; border-radius: 10px; }
-        .fraction-input { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; }
-        input { width: 40px; padding: 5px; text-align: center; font-size: 1.1rem; border: 2px solid #bdc3c7; border-radius: 5px; }
-        .line { border-top: 2px solid black; width: 40px; margin: 5px 0; }
-        button { width: 100%; padding: 12px; background: #27ae60; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; }
-        button:hover { background: #2ecc71; }
-        #feedback { margin-top: 15px; text-align: center; font-weight: bold; min-height: 24px; }
+        :root { --main-blue: #3498db; --success: #27ae60; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .header { text-align: center; color: #2c3e50; margin-bottom: 30px; }
+        .quiz-container { max-width: 700px; width: 100%; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        
+        /* Tört megjelenítése CSS-sel */
+        .fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; font-weight: bold; margin: 0 5px; }
+        .num { border-bottom: 2px solid #333; padding: 0 3px; }
+        .den { padding: 0 3px; }
+        
+        .task { background: #fff; border-left: 5px solid var(--main-blue); padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; }
+        .operation { font-size: 1.2rem; display: flex; align-items: center; }
+        .inputs { display: flex; flex-direction: column; align-items: center; margin-left: 15px; }
+        input { width: 45px; padding: 5px; text-align: center; border: 2px solid #ddd; border-radius: 4px; font-size: 1rem; }
+        input:focus { border-color: var(--main-blue); outline: none; }
+        .hr-mini { width: 40px; border-top: 2px solid #333; margin: 3px 0; }
+        
+        button#check-btn { background: var(--main-blue); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.2rem; cursor: pointer; width: 100%; transition: transform 0.2s; }
+        button#check-btn:hover { transform: scale(1.02); background: #2980b9; }
+        #result-area { margin-top: 20px; text-align: center; font-size: 1.3rem; font-weight: bold; }
+        .status-icon { margin-left: 10px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>🍕 Tört-Kvíz</h1>
-    <p>Számítsd ki a műveletet és írd be a számlálót és a nevezőt!</p>
+<div class="header">
+    <h1>🍕 Törtek Mestere: 5. Osztály</h1>
+    <p>Oldd meg a 8 feladatot! Írd be a számlálót és a nevezőt!</p>
+</div>
 
-    <div class="question">
-        Mennyi: <strong>1/2 + 1/4</strong> ?
+<div class="quiz-container" id="quiz">
     </div>
 
-    <div class="fraction-input">
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <input type="number" id="num" placeholder="?">
-            <div class="line"></div>
-            <input type="number" id="den" placeholder="?">
-        </div>
-    </div>
-
-    <button onclick="checkAnswer()">Ellenőrzés!</button>
-    <div id="feedback"></div>
+<div class="quiz-container" style="margin-top:20px;">
+    <button id="check-btn" onclick="evaluateQuiz()">Ellenőrzés és Pontszámítás</button>
+    <div id="result-area"></div>
 </div>
 
 <script>
-    function checkAnswer() {
-        const num = document.getElementById('num').value;
-        const den = document.getElementById('den').value;
-        const feedback = document.getElementById('feedback');
+    const questions = [
+        { n1: 3, d1: 8, op: '+', n2: 2, d2: 8, ansN: 5, ansD: 8 },
+        { n1: 9, d1: 10, op: '-', n2: 3, d2: 10, ansN: 6, ansD: 10 },
+        { n1: 1, d1: 2, op: '+', n2: 1, d2: 4, ansN: 3, ansD: 4 },
+        { n1: 2, d1: 3, op: '+', n2: 1, d2: 6, ansN: 5, ansD: 6 },
+        { n1: 4, d1: 5, op: '-', n2: 1, d2: 2, ansN: 3, ansD: 10 },
+        { n1: 2, d1: 7, op: '*', n2: 3, d2: null, ansN: 6, ansD: 7 },
+        { n1: 6, d1: 7, op: ':', n2: 2, d2: null, ansN: 3, ansD: 7 },
+        { n1: 1, d1: 3, op: ':', n2: 4, d2: null, ansN: 1, ansD: 12 }
+    ];
 
-        if(num == 3 && den == 4) {
-            feedback.innerHTML = "🎉 Szuper! 3/4 a helyes válasz!";
-            feedback.style.color = "#27ae60";
-        } else if (num == "" || den == "") {
-            feedback.innerHTML = "⚠️ Írj be számokat!";
-            feedback.style.color = "#e67e22";
-        } else {
-            feedback.innerHTML = "❌ Nem pont ennyi... Próbáld újra!";
-            feedback.style.color = "#c0392b";
-        }
+    function renderQuestions() {
+        const container = document.getElementById('quiz');
+        questions.forEach((q, i) => {
+            let qHtml = `<div class="task"><div class="operation"><span>${i+1}. </span>`;
+            qHtml += `<div class="fraction"><span class="num">${q.n1}</span><span class="den">${q.d1}</span></div>`;
+            qHtml += `<span style="margin:0 10px">${q.op}</span>`;
+            
+            if(q.d2) {
+                qHtml += `<div class="fraction"><span class="num">${q.n2}</span><span class="den">${q.d2}</span></div>`;
+            } else {
+                qHtml += `<span style="font-weight:bold">${q.n2}</span>`;
+            }
+            
+            qHtml += `<span style="margin:0 15px">=</span></div>`;
+            qHtml += `<div class="inputs"><input type="number" id="n${i}"><div class="hr-mini"></div><input type="number" id="d${i}"></div>`;
+            qHtml += `<span id="status${i}" class="status-icon"></span></div>`;
+            container.innerHTML += qHtml;
+        });
     }
+
+    function evaluateQuiz() {
+        let score = 0;
+        questions.forEach((q, i) => {
+            const userN = document.getElementById(`n${i}`).value;
+            const userD = document.getElementById(`d${i}`).value;
+            const status = document.getElementById(`status${i}`);
+
+            if(userN == q.ansN && userD == q.ansD) {
+                score++;
+                status.innerHTML = "✅";
+            } else {
+                status.innerHTML = "❌";
+            }
+        });
+        
+        const resultArea = document.getElementById('result-area');
+        resultArea.innerHTML = `Eredményed: ${score} / ${questions.length}`;
+        resultArea.style.color = score > 5 ? "#27ae60" : "#e67e22";
+    }
+
+    renderQuestions();
 </script>
 
 </body>
